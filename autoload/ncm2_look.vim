@@ -3,6 +3,8 @@ if get(s:, 'loaded', 0)
 endif
 let s:loaded = 1
 
+let g:ncm2_look_enabled = get(g:, 'ncm2_look_enabled',  0)
+
 let g:ncm2_look#proc = yarp#py3('ncm2_look')
 
 let g:ncm2_look#source = get(g:, 'ncm2_look#look_source', {
@@ -10,7 +12,7 @@ let g:ncm2_look#source = get(g:, 'ncm2_look#look_source', {
             \ 'priority': 6,
             \ 'mark': 'look',
             \ 'on_complete': 'ncm2_look#on_complete',
-            \ 'on_warmup' : 'ncm2_look#on_warmup'
+            \ 'on_warmup': 'ncm2_look#on_warmup'
             \ })
 
 let g:ncm2_look#source = extend(g:ncm2_look#source,
@@ -26,5 +28,10 @@ function! ncm2_look#on_warmup(ctx)
 endfunction
 
 function! ncm2_look#on_complete(ctx)
+    let s:is_enabled = get(b:, 'ncm2_look_enabled',
+                \ get(g:, 'ncm2_look_enabled', 0))
+    if ! s:is_enabled
+        return
+    endif
     call g:ncm2_look#proc.try_notify('on_complete', a:ctx)
 endfunction

@@ -31,6 +31,34 @@ autocmd BufEnter * call ncm2#enable_for_buffer()
 set completeopt=noinsert,menuone,noselect
 ```
 
+## Usage
+
+By default, look.vim will be disabled. After all, if you're writing code you
+don't want the completion popup jumping at you everytime you type something that
+remotely looks like a word.
+
+#### To enable it globally
+
+Put this in your `.vimrc`
+
+```vim
+let g:ncm2_look_enabled = 1
+```
+
+#### To enable it on a per-buffer basis
+
+```vim
+:let b:ncm2_look_enabled = 1
+```
+
+#### To enable it on a pre-filetype basis
+
+Let's say you want to enable it for markdown files.
+
+-   Create a file in `~/.vim/ftplugin/markdown.vim`
+-   Put `let b:ncm2_look_enabled = 1` on the file
+-   Save and open a markdown file
+
 [neco-look]: https://github.com/ujihisa/neco-look
 [ncm2]: https://github.com/ncm2/ncm2
 [nvim-yarp]: https://github.com/roxma/nvim-yarp
