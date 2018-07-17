@@ -35,3 +35,17 @@ function! ncm2_look#on_complete(ctx)
     endif
     call g:ncm2_look#proc.try_notify('on_complete', a:ctx)
 endfunction
+
+
+function! ncm2_look#toggle(scope)
+    let s:ncm2_look = {}
+    let s:ncm2_look['global'] = get(g:, 'ncm2_look_enabled', 0)
+    let s:ncm2_look['buffer'] = get(b:, 'ncm2_look_enabled', s:ncm2_look['global'])
+    if (s:ncm2_look[a:scope] == 1)
+        let s:ncm2_look[a:scope]=0
+    else
+        let s:ncm2_look[a:scope]=1
+    endif
+    let g:ncm2_look_enabled=s:ncm2_look['global']
+    let b:ncm2_look_enabled=s:ncm2_look['buffer']
+endfunction
