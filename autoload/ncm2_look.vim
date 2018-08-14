@@ -5,6 +5,8 @@ let s:loaded = 1
 
 let g:ncm2_look_enabled = get(g:, 'ncm2_look_enabled',  0)
 
+let g:ncm2_look_use_spell = get(g:, 'ncm2_look_use_spell',  0)
+
 let g:ncm2_look#proc = yarp#py3('ncm2_look')
 
 let g:ncm2_look#source = get(g:, 'ncm2_look#look_source', {
