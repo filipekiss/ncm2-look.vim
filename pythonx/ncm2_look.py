@@ -45,7 +45,9 @@ class Source(Ncm2Source):
                     for word in self._query_spell(query)
                 ]
                 if re.match('[A-Z][a-z0-9_-]*$', query):
-                    spell_words = [word[0].upper() + word[1:] for word in spell_words]
+                    spell_words = [
+                        word[0].upper() + word[1:] for word in spell_words
+                    ]
                 elif re.match('[A-Z][A-Z0-9_-]*$', query):
                     spell_words = [word.upper() for word in spell_words]
                 if spell_words:
@@ -69,7 +71,7 @@ class Source(Ncm2Source):
         vim_spellfile = self.nvim.eval('&spellfile') or None
 
         if not self.use_vim_spellfile or not vim_spellfile:
-            return None
+            return []
 
         spell_words = []
         spellfiles = vim_spellfile.split(',')
