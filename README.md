@@ -84,6 +84,23 @@ _Scopes:_ global (`g:ncm2_look_use_spell`)
 If this option is enabled, use `&spellfile` as complimentary sources for word
 completion. See `:h spellfile` for more details on how that works
 
+###### `ncm2_look_mark`
+
+_Possible values:_ Any valid string (default: look)
+
+_Scopes:_ global (`g:ncm2_look_mark`)
+
+Change the mark used in the completion menu. Default is `look`, as you can see
+on the first gif, but any UTF-8 string is valid. For example:
+
+```vim
+let g:ncm2_look_mark = '👀'
+```
+
+Will result in this:
+
+![mark](https://user-images.githubusercontent.com/48519/44112766-6d1470c0-9fdc-11e8-8a03-146b255222de.gif)
+
 ---
 
 **look.vim** © 2018+, Filipe Kiss Released under the [MIT] License.<br>
