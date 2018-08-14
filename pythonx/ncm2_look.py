@@ -15,6 +15,8 @@ class Source(Ncm2Source):
         self.executable_look = nvim.call('executable', 'look')
         self.use_vim_spellfile = self.nvim.eval(
             'g:ncm2_look_use_spell') or None
+        self.use_vim_dictionary = self.nvim.eval(
+            'g:ncm2_look_use_dictionary') or None
 
     def on_complete(self, ctx):
 
@@ -38,6 +40,8 @@ class Source(Ncm2Source):
         except subprocess.CalledProcessError:
             pass
 
+        # @TODO: Make this more maintainable instead of using multiple try catch
+        # (14-08-18 16:02 - filipekiss)
         if self.use_vim_spellfile:
             try:
                 spell_words = [
@@ -55,7 +59,27 @@ class Source(Ncm2Source):
             except subprocess.CalledProcessError:
                 pass
 
+        if self.use_vim_dictionary:
+            try:
+                dictionary_words = [
+                    word.decode('utf-8', errors='ignore')
+                    for word in self._query_dictionary(query)
+                ]
+                if re.match('[A-Z][a-z0-9_-]*$', query):
+                    dictionary_words = [
+                        word[0].upper() + word[1:] for word in dictionary_words
+                    ]
+                elif re.match('[A-Z][A-Z0-9_-]*$', query):
+                    dictionary_words = [
+                        word.upper() for word in dictionary_words
+                    ]
+                if dictionary_words:
+                    matches = matches + dictionary_words
+            except subprocess.CalledProcessError:
+                pass
+
         if matches:
+            set(matches)
             self.complete(ctx, ctx['startccol'], matches)
         else:
             return
@@ -84,6 +108,25 @@ class Source(Ncm2Source):
                     command).splitlines()
 
         return spell_words
+
+    def _query_dictionary(self, querystring):
+        logger.debug('Running dictionary')
+        vim_dictionary = self.nvim.eval('&dictionary') or None
+
+        if not self.use_vim_dictionary or not vim_dictionary:
+            return []
+
+        dictionary_words = []
+        dictionaries = vim_dictionary.split(',')
+
+        for dictionary in dictionaries:
+            if isfile(dictionary):
+                logger.debug('Checking Dictionary {}'.format(dictionary))
+                command = ['look', querystring, dictionary]
+                dictionary_words = dictionary_words + subprocess.check_output(
+                    command).splitlines()
+
+        return dictionary_words
 
 
 source = Source(vim)
