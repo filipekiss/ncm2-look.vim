@@ -85,13 +85,11 @@ class Source(Ncm2Source):
             return
 
     def _query_look(self, querystring):
-        logger.debug('Running look')
         command = ['look', querystring]
 
         return subprocess.check_output(command).splitlines()
 
     def _query_spell(self, querystring):
-        logger.debug('Running spell')
         vim_spellfile = self.nvim.eval('&spellfile') or None
 
         if not self.use_vim_spellfile or not vim_spellfile:
@@ -102,7 +100,6 @@ class Source(Ncm2Source):
 
         for spellfile in spellfiles:
             if isfile(spellfile):
-                logger.debug('Checking Spellfile {}'.format(spellfile))
                 command = ['look', querystring, spellfile]
                 spell_words = spell_words + subprocess.check_output(
                     command).splitlines()
@@ -110,7 +107,6 @@ class Source(Ncm2Source):
         return spell_words
 
     def _query_dictionary(self, querystring):
-        logger.debug('Running dictionary')
         vim_dictionary = self.nvim.eval('&dictionary') or None
 
         if not self.use_vim_dictionary or not vim_dictionary:
@@ -121,7 +117,6 @@ class Source(Ncm2Source):
 
         for dictionary in dictionaries:
             if isfile(dictionary):
-                logger.debug('Checking Dictionary {}'.format(dictionary))
                 command = ['look', querystring, dictionary]
                 dictionary_words = dictionary_words + subprocess.check_output(
                     command).splitlines()
